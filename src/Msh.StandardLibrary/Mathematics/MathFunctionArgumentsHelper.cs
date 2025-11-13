@@ -2,9 +2,9 @@
 
 namespace Msh.StandardLibrary.Mathematics;
 
-internal readonly ref struct ArgumentsHelper
+internal readonly ref struct MathFunctionArgumentsHelper
 {
-    internal static MathFunction ExpectArgs(int count, MathFunction body, [CallerArgumentExpression(nameof(body))] string? name = null)
+    internal static MathFunction EnsureArgumentCount(int count, MathFunction body, [CallerArgumentExpression(nameof(body))] string? name = null)
     {
         return args => args.Length == count
             ? body(args)
