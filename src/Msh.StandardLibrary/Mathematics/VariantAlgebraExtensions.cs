@@ -7,7 +7,7 @@ public static class VariantAlgebraExtensions
 {
     extension(IVariant variant)
     {
-        IVariant Sqrt()
+        internal IVariant Sqrt()
         {
             return variant switch
             {
@@ -19,7 +19,7 @@ public static class VariantAlgebraExtensions
             };
         }
 
-        IVariant Pow(IVariant other)
+        internal IVariant Pow(IVariant other)
         {
             return variant switch
             {

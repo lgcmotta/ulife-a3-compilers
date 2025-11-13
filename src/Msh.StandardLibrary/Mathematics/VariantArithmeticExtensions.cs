@@ -7,7 +7,7 @@ public static class VariantArithmeticExtensions
 {
     extension(IVariant variant)
     {
-        IVariant Add(IVariant other)
+        internal IVariant Add(IVariant other)
         {
             if (variant is ListType left && other is ListType right)
             {
@@ -37,7 +37,7 @@ public static class VariantArithmeticExtensions
             };
         }
 
-        IVariant Subtract(IVariant other)
+        internal IVariant Subtract(IVariant other)
         {
             if (variant is ListType left && other is ListType right)
             {
@@ -67,7 +67,7 @@ public static class VariantArithmeticExtensions
             };
         }
 
-        IVariant Multiply(IVariant other)
+        internal IVariant Multiply(IVariant other)
         {
             if (variant is ListType left && other is ListType right)
             {
@@ -97,7 +97,7 @@ public static class VariantArithmeticExtensions
             };
         }
 
-        IVariant Divide(IVariant other)
+        internal IVariant Divide(IVariant other)
         {
             if (variant is ListType left && other is ListType right)
             {

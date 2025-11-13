@@ -7,7 +7,7 @@ public static class VariantCalculusExtensions
 {
     extension(IVariant variant)
     {
-        public IVariant Abs()
+        internal IVariant Abs()
         {
             return variant.Kind switch
             {
@@ -20,7 +20,7 @@ public static class VariantCalculusExtensions
             };
         }
 
-        public IVariant Min(IVariant other)
+        internal IVariant Min(IVariant other)
         {
             return variant switch
             {
@@ -42,7 +42,7 @@ public static class VariantCalculusExtensions
             };
         }
 
-        public IVariant Max(IVariant other)
+        internal IVariant Max(IVariant other)
         {
             return variant switch
             {
@@ -65,7 +65,7 @@ public static class VariantCalculusExtensions
         }
     }
 
-    public static IVariant Sum(this IEnumerable<IVariant> variants)
+    internal static IVariant Sum(this IEnumerable<IVariant> variants)
     {
         if (variants.TryGetNonEnumeratedCount(out var count) && count is 0)
         {
