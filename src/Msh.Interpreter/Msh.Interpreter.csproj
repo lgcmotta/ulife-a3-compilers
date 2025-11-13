@@ -18,5 +18,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Msh.StandardLibrary\Msh.StandardLibrary.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contexts\" />
+    <Folder Include="Scopes\" />
+  </ItemGroup>
   
 </Project>
