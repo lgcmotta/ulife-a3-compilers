@@ -1,10 +1,10 @@
 ﻿using Msh.StandardLibrary.Types;
 
-namespace Msh.Interpreter.Slots;
+namespace Msh.Interpreter.Definitions;
 
-internal class VariableSlot
+internal class VariableDefinition
 {
-    public VariableSlot(string type, IVariant variant)
+    public VariableDefinition(string type, IVariant variant)
     {
         Type = type;
         Variant = variant;

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" />
     <PackageReference Include="Antlr4BuildTasks" />
+    <PackageReference Include="JetBrains.Annotations" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,9 +20,4 @@
     <ProjectReference Include="..\Msh.StandardLibrary\Msh.StandardLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contexts\" />
-    <Folder Include="Scopes\" />
-  </ItemGroup>
-  
 </Project>

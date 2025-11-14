@@ -9,7 +9,7 @@ item
 
 functionDef
   : type ID_PASCAL '(' paramList? ')' block
-  | arrayType ID_PASCAL '(' paramList? ')' block
+  | listType ID_PASCAL '(' paramList? ')' block
   ;
 
 paramList
@@ -29,7 +29,7 @@ type
   | VOID                                      # TypeVoid
   ;
 
-arrayType
+listType
   : type '[' ']'
   ;
 
@@ -50,7 +50,7 @@ callStmt
   : WRITE '(' argList? ')' ';'                # WriteStatement
   | READ '(' argList? ')' ';'                 # ReadStatement
   | ID_PASCAL '(' argList? ')' ';'            # UserCallStatement
-  | arrayCall ';'                             # ArrayCallStatement
+  | listCall ';'                             # ListCallStatement
   ;
 
 returnStmt
@@ -65,8 +65,8 @@ varDecl
   : type ID '=' expr ';'                      # VarDeclTypedInit
   | type ID ';'                               # VarDeclTypedEmpty
   | VAR ID '=' expr ';'                       # VarDeclInferred
-  | type '[' ']' ID '=' arrayLiteral ';'      # VarDeclTypedArrayLiteral
-  | type '[' ']' ID '=' expr ';'              # VarDeclTypedArrayExpr
+  | type '[' ']' ID '=' listLiteral ';'      # VarDeclTypedListLiteral
+  | type '[' ']' ID '=' expr ';'              # VarDeclTypedListExpr
   ;
 
 varDeclNoSemi
@@ -76,7 +76,7 @@ varDeclNoSemi
 
 assignment
   : ID '=' expr                               # AssignVariable
-  | arrayAccess '=' expr                      # AssignArrayElement
+  | listAccess '=' expr                      # AssignListElement
   ;
 
 statementOrBlock
@@ -146,23 +146,23 @@ expr
   | WRITE '(' argList? ')'                              # Write
   | READ '(' argList? ')'                               # Read
   | ID_PASCAL '(' argList? ')'                          # Call
-  | arrayCall                                           # ArrayCallExpr
-  | arrayLiteral                                        # ArrayLiteralExpr
-  | arrayAccess                                         # ArrayAccessExpr
+  | listCall                                           # ListCallExpr
+  | listLiteral                                        # ListLiteralExpr
+  | listAccess                                         # ListAccessExpr
   | ID                                                  # Var
   | '(' expr ')'                                        # Parens
   ;
 
-arrayLiteral
+listLiteral
   : '[' expr (',' expr)* ']'
   | '[' ']'
   ;
 
-arrayAccess
+listAccess
   : ID '[' expr ']'
   ;
 
-arrayCall
+listCall
   : instance=ID '.' method=(ID | ID_PASCAL) '(' argList? ')'
   ;
 
