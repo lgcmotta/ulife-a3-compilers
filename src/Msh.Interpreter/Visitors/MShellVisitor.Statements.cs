@@ -21,6 +21,11 @@ public sealed partial class MShellVisitor
         return Visit(context.callStmt());
     }
 
+    public override IVariant VisitCompoundAssignmentStatement(MShellParser.CompoundAssignmentStatementContext context)
+    {
+        return Visit(context.compoundAssignmentStmt());
+    }
+
     public override IVariant VisitDoWhileStatement(MShellParser.DoWhileStatementContext context)
     {
         return Visit(context.doWhileStmt());
@@ -49,6 +54,11 @@ public sealed partial class MShellVisitor
     public override IVariant VisitPostfixStatement(MShellParser.PostfixStatementContext context)
     {
         return Visit(context.postfixStmt());
+    }
+
+    public override IVariant VisitPrefixStatement(MShellParser.PrefixStatementContext context)
+    {
+        return Visit(context.prefixStmt());
     }
 
     public override IVariant VisitReadStatement(MShellParser.ReadStatementContext context)

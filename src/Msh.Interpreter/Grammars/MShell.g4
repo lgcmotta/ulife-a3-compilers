@@ -3,8 +3,8 @@ grammar MShell;
 prog: item* EOF;
 
 item
-  : functionDef                               # FuncDefStatement
-  | stat                                      # Statement
+  : functionDef                                         # FuncDefStatement
+  | stat                                                # Statement
   ;
 
 functionDef
@@ -20,37 +20,39 @@ param
   : type ID
   ;
 
-type
-  : INT                                       # TypeInt
-  | DOUBLE                                    # TypeDouble
-  | DECIMAL                                   # TypeDecimal
-  | BOOL                                      # TypeBool
-  | STRING                                    # TypeString
-  | VOID                                      # TypeVoid
-  ;
-
 listType
   : type '[' ']'
   ;
 
+type
+  : INT                                                 # TypeInt
+  | DOUBLE                                              # TypeDouble
+  | DECIMAL                                             # TypeDecimal
+  | BOOL                                                # TypeBool
+  | STRING                                              # TypeString
+  | VOID                                                # TypeVoid
+  ;
+
 stat
-  : varDecl                                   # VarDeclStatement
-  | assignment ';'                            # AssignStatement
-  | postfixStmt                               # PostfixStatement
-  | callStmt                                  # CallStatement
-  | returnStmt                                # ReturnStatement
-  | ifStmt                                    # IfStatement
-  | whileStmt                                 # WhileStatement
-  | doWhileStmt                               # DoWhileStatement
-  | forStmt                                   # ForStatement
-  | block                                     # BlockStatement
+  : varDecl                                             # VarDeclStatement
+  | assignment ';'                                      # AssignStatement
+  | postfixStmt                                         # PostfixStatement
+  | prefixStmt                                          # PrefixStatement
+  | compoundAssignmentStmt                              # CompoundAssignmentStatement
+  | callStmt                                            # CallStatement
+  | returnStmt                                          # ReturnStatement
+  | ifStmt                                              # IfStatement
+  | whileStmt                                           # WhileStatement
+  | doWhileStmt                                         # DoWhileStatement
+  | forStmt                                             # ForStatement
+  | block                                               # BlockStatement
   ;
 
 callStmt
-  : WRITE '(' argList? ')' ';'                # WriteStatement
-  | READ '(' argList? ')' ';'                 # ReadStatement
-  | ID_PASCAL '(' argList? ')' ';'            # UserCallStatement
-  | listCall ';'                             # ListCallStatement
+  : WRITE '(' argList? ')' ';'                          # WriteStatement
+  | READ '(' argList? ')' ';'                           # ReadStatement
+  | ID_PASCAL '(' argList? ')' ';'                      # UserCallStatement
+  | listCall ';'                                        # ListCallStatement
   ;
 
 returnStmt
@@ -62,21 +64,21 @@ block
   ;
 
 varDecl
-  : type ID '=' expr ';'                      # VarDeclTypedInit
-  | type ID ';'                               # VarDeclTypedEmpty
-  | VAR ID '=' expr ';'                       # VarDeclInferred
-  | type '[' ']' ID '=' listLiteral ';'      # VarDeclTypedListLiteral
-  | type '[' ']' ID '=' expr ';'              # VarDeclTypedListExpr
+  : type ID '=' expr ';'                                # VarDeclTypedInit
+  | type ID ';'                                         # VarDeclTypedEmpty
+  | VAR ID '=' expr ';'                                 # VarDeclInferred
+  | type '[' ']' ID '=' listLiteral ';'                 # VarDeclTypedListLiteral
+  | type '[' ']' ID '=' expr ';'                        # VarDeclTypedListExpr
   ;
 
 varDeclNoSemi
-  : type ID '=' expr                          # VarDeclInlineTyped
-  | VAR ID '=' expr                           # VarDeclInlineInferred
+  : type ID '=' expr                                    # VarDeclInlineTyped
+  | VAR ID '=' expr                                     # VarDeclInlineInferred
   ;
 
 assignment
-  : ID '=' expr                               # AssignVariable
-  | listAccess '=' expr                      # AssignListElement
+  : ID '=' expr                                         # AssignVariable
+  | listAccess '=' expr                                 # AssignListElement
   ;
 
 statementOrBlock
@@ -105,8 +107,8 @@ forStmt
   ;
 
 forInit
-  : varDeclNoSemi                           # ForInitDecl
-  | assignment                              # ForInitAssignment
+  : varDeclNoSemi                                       # ForInitDecl
+  | assignment                                          # ForInitAssignment
   ;
 
 forCond
@@ -122,35 +124,54 @@ postfixStmt
   : postfixExpr ';'
   ;
 
+prefixStmt
+  : prefixExpr ';'
+  ;
+
+compoundAssignmentStmt
+  : compoundAssignmentExpr ';'
+  ;
+
 postfixExpr
-  : ID INC                                    # PostfixIncrement
-  | ID DEC                                    # PostfixDecrement
+  : ID INC                                              # PostfixIncrement
+  | ID DEC                                              # PostfixDecrement
+  ;
+
+prefixExpr
+  : INC ID                                              # PrefixIncrement
+  | DEC ID                                              # PrefixDecrement
+  ;
+
+compoundAssignmentExpr
+  : ID (CA_ADD|CA_SUB|CA_MUL|CA_DIV|CA_MOD) expr        # CompoundAssignment
   ;
 
 expr
-  : 'if' '(' expr ')' expr 'else' expr                  # IfExpr
-  | left=expr '?' then=expr ':' else=expr               # Ternary
-  | left=expr '||' right=expr                           # Or
-  | left=expr '&&' right=expr                           # And
-  | left=expr op=(EQ|NEQ|LT|LE|GT|GE) right=expr        # Cmp
-  | <assoc=right> left=expr op=POW right=expr           # Pow
-  | SUB expr                                            # UnaryMinus
-  | left=expr op=(MUL|DIV) right=expr                   # MulDiv
-  | left=expr op=(ADD|SUB) right=expr                   # AddSub
-  | BOOL_LIT                                            # Bool
-  | NUMBER_DECIMAL                                      # Decimal
-  | NUMBER_DOUBLE                                       # Double
-  | NUMBER_INT                                          # Integer
-  | STR_LIT                                             # String
-  | postfixExpr                                         # Postfix
-  | WRITE '(' argList? ')'                              # Write
-  | READ '(' argList? ')'                               # Read
-  | ID_PASCAL '(' argList? ')'                          # Call
-  | listCall                                           # ListCallExpr
-  | listLiteral                                        # ListLiteralExpr
-  | listAccess                                         # ListAccessExpr
-  | ID                                                  # Var
-  | '(' expr ')'                                        # Parens
+  : 'if' '(' expr ')' expr 'else' expr                  # IfExpression
+  | left=expr '?' then=expr ':' else=expr               # TernaryExpression
+  | left=expr '||' right=expr                           # OrExpression
+  | left=expr '&&' right=expr                           # AndExpression
+  | left=expr op=(EQ|NEQ|LT|LE|GT|GE) right=expr        # CompareExpression
+  | <assoc=right> left=expr op=POW right=expr           # PowExpression
+  | SUB expr                                            # UnaryMinusExpression
+  | left=expr op=(MUL|DIV) right=expr                   # MulDivExpression
+  | left=expr op=(ADD|SUB) right=expr                   # AddSubExpression
+  | BOOL_LIT                                            # BoolExpression
+  | NUMBER_DECIMAL                                      # DecimalExpression
+  | NUMBER_DOUBLE                                       # DoubleExpression
+  | NUMBER_INT                                          # IntegerExpression
+  | STR_LIT                                             # StringExpression
+  | postfixExpr                                         # PostfixExpression
+  | prefixStmt                                          # PrefixExpression
+  | compoundAssignmentStmt                              # CompoundAssignmentExpression
+  | WRITE '(' argList? ')'                              # WriteExpression
+  | READ '(' argList? ')'                               # ReadExpression
+  | ID_PASCAL '(' argList? ')'                          # CallExpression
+  | listCall                                            # ListCallExpression
+  | listLiteral                                         # ListLiteralExpression
+  | listAccess                                          # ListAccessExpression
+  | ID                                                  # VarExpression
+  | '(' expr ')'                                        # ParensExpression
   ;
 
 listLiteral
@@ -179,8 +200,6 @@ VOID: 'void';
 WRITE: 'Write';
 READ: 'Read';
 VAR: 'var';
-INC: '++';
-DEC: '--';
 
 NUMBER_DECIMAL: [0-9]+ '.' [0-9]+ [mM];
 NUMBER_DOUBLE:  [0-9]+ '.' [0-9]+ ([dD])?;
@@ -199,6 +218,16 @@ SUB: '-';
 MUL: '*';
 DIV: '/';
 POW: '^';
+MOD: '%';
+
+INC: '++';
+DEC: '--';
+
+CA_ADD: '+=';
+CA_SUB: '-=';
+CA_MUL: '*=';
+CA_DIV: '/=';
+CA_MOD: '%=';
 
 EQ: '==';
 NEQ: '!=';
