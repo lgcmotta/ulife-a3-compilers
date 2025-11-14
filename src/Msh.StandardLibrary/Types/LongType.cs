@@ -14,6 +14,10 @@ public sealed class LongType : Variant<LongType>, IVariant
 
     public long Value { get; }
 
+    public static IVariant Zero => new LongType(0L);
+
+    public static IVariant One => new LongType(1L);
+
     public static LongType operator +(LongType left, LongType right) => new(left.Value + right.Value);
     public static LongType operator -(LongType left, LongType right) => new(left.Value - right.Value);
     public static LongType operator *(LongType left, LongType right) => new(left.Value * right.Value);
