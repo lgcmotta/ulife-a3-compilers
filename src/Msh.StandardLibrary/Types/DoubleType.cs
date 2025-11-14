@@ -14,6 +14,8 @@ public sealed class DoubleType : Variant<DoubleType>, IVariant
 
     public double Value { get; }
 
+    public static IVariant Zero => new DoubleType(0D);
+
     public static DoubleType operator +(DoubleType left, DoubleType right) => new(left.Value + right.Value);
     public static DoubleType operator -(DoubleType left, DoubleType right) => new(left.Value - right.Value);
     public static DoubleType operator *(DoubleType left, DoubleType right) => new(left.Value * right.Value);

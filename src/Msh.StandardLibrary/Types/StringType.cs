@@ -13,6 +13,8 @@ public sealed class StringType : Variant<StringType>, IVariant
 
     public string Value { get; }
 
+    public static IVariant Empty => new StringType(string.Empty);
+
     public static StringType operator +(StringType left, StringType right)
         => new($"{left.Value}{right.Value}");
 
@@ -60,6 +62,10 @@ public sealed class StringType : Variant<StringType>, IVariant
             null => left is not null,
             _ => left is not null && string.Compare(left.Value, right.Value, StringComparison.Ordinal) >= 0
         };
+
+    public static implicit operator string(StringType s) => s.Value;
+
+    public static implicit operator StringType(string s) => new(s);
 
     public override int CompareTo(StringType? other)
     {

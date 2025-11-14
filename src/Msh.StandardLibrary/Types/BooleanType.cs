@@ -11,6 +11,10 @@ public sealed class BooleanType : Variant<BooleanType>, IVariant
 
     public bool Value { get; }
 
+    public static IVariant False => new BooleanType(false);
+
+    public static IVariant True => new BooleanType(true);
+
     public static BooleanType operator &(BooleanType left, BooleanType right) => new(left.Value & right.Value);
     public static BooleanType operator |(BooleanType left, BooleanType right) => new(left.Value | right.Value);
     public static BooleanType operator ^(BooleanType left, BooleanType right) => new(left.Value ^ right.Value);
@@ -60,6 +64,10 @@ public sealed class BooleanType : Variant<BooleanType>, IVariant
             null => left is not null,
             _ => left is not null && left.Value.CompareTo(right.Value) >= 0
         };
+
+    public static implicit operator bool(BooleanType b) => b.Value;
+
+    public static implicit operator BooleanType(bool value) => new(value);
 
     public override int CompareTo(BooleanType? other)
     {

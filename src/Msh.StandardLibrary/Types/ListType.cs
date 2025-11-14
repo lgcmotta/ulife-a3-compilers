@@ -15,6 +15,10 @@ public sealed class ListType : Variant<ListType>, IVariant, IEnumerable<IVariant
 
     public IVariant this[int index] => Items[index];
 
+    public int Count => Items.Count;
+
+    public static IVariant Empty => new ListType([]);
+
     public void Add(IVariant variant) => Items.Add(variant);
 
     public void RemoveAt(int index) => Items.RemoveAt(index);
