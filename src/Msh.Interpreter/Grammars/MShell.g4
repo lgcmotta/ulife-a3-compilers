@@ -8,8 +8,7 @@ item
   ;
 
 functionDef
-  : type ID_PASCAL '(' paramList? ')' block
-  | listType ID_PASCAL '(' paramList? ')' block
+  : type ID_PASCAL '(' paramList? ')' block             # TypeFunctionDefinition
   ;
 
 paramList
@@ -20,25 +19,22 @@ param
   : type ID
   ;
 
-listType
-  : type '[' ']'
+type
+  : baseType ('[' ']')*                                 # TypeCompositeBase
+  | VOID                                                # TypeVoid
   ;
 
-type
+baseType
   : INT                                                 # TypeInt
   | DOUBLE                                              # TypeDouble
   | DECIMAL                                             # TypeDecimal
   | BOOL                                                # TypeBool
   | STRING                                              # TypeString
-  | VOID                                                # TypeVoid
   ;
 
 stat
   : varDecl                                             # VarDeclStatement
   | assignment ';'                                      # AssignStatement
-  | postfixStmt                                         # PostfixStatement
-  | prefixStmt                                          # PrefixStatement
-  | compoundAssignmentStmt                              # CompoundAssignmentStatement
   | callStmt                                            # CallStatement
   | returnStmt                                          # ReturnStatement
   | ifStmt                                              # IfStatement
@@ -46,6 +42,47 @@ stat
   | doWhileStmt                                         # DoWhileStatement
   | forStmt                                             # ForStatement
   | block                                               # BlockStatement
+  ;
+
+block
+  : '{' stat* '}'
+  ;
+
+statementOrBlock
+  : block
+  | stat
+  ;
+
+varDecl
+  : type ID '=' expr ';'                                # VarDeclTypedInit
+  | type ID ';'                                         # VarDeclTypedEmpty
+  | VAR ID '=' expr ';'                                 # VarDeclInferred
+  ;
+
+varDeclNoSemi
+  : type ID '=' expr                                    # VarDeclInlineTyped
+  | VAR ID '=' expr                                     # VarDeclInlineInferred
+  ;
+
+assignment
+  : ID '=' expr                                         # AssignVariable
+  | listAccess '=' expr                                 # AssignListElement
+  | postfixExpr                                         # AssignPostfix
+  | prefixExpr                                          # AssignPrefix
+  | compoundAssignmentExpr                              # AssignCompound
+  ;
+
+listAccess
+  : ID ('[' expr ']')+
+  ;
+
+listLiteral
+  : '[' expr (',' expr)* ']'
+  | '[' ']'
+  ;
+
+listCall
+  : instance=ID '.' method=(ID | ID_PASCAL) '(' argList? ')'
   ;
 
 callStmt
@@ -57,33 +94,6 @@ callStmt
 
 returnStmt
   : 'return' expr? ';'
-  ;
-
-block
-  : '{' stat* '}'
-  ;
-
-varDecl
-  : type ID '=' expr ';'                                # VarDeclTypedInit
-  | type ID ';'                                         # VarDeclTypedEmpty
-  | VAR ID '=' expr ';'                                 # VarDeclInferred
-  | type '[' ']' ID '=' listLiteral ';'                 # VarDeclTypedListLiteral
-  | type '[' ']' ID '=' expr ';'                        # VarDeclTypedListExpr
-  ;
-
-varDeclNoSemi
-  : type ID '=' expr                                    # VarDeclInlineTyped
-  | VAR ID '=' expr                                     # VarDeclInlineInferred
-  ;
-
-assignment
-  : ID '=' expr                                         # AssignVariable
-  | listAccess '=' expr                                 # AssignListElement
-  ;
-
-statementOrBlock
-  : block
-  | stat
   ;
 
 ifStmt
@@ -120,32 +130,6 @@ forIter
   | expr
   ;
 
-postfixStmt
-  : postfixExpr ';'
-  ;
-
-prefixStmt
-  : prefixExpr ';'
-  ;
-
-compoundAssignmentStmt
-  : compoundAssignmentExpr ';'
-  ;
-
-postfixExpr
-  : ID INC                                              # PostfixIncrement
-  | ID DEC                                              # PostfixDecrement
-  ;
-
-prefixExpr
-  : INC ID                                              # PrefixIncrement
-  | DEC ID                                              # PrefixDecrement
-  ;
-
-compoundAssignmentExpr
-  : ID (CA_ADD|CA_SUB|CA_MUL|CA_DIV|CA_MOD) expr        # CompoundAssignment
-  ;
-
 expr
   : 'if' '(' expr ')' expr 'else' expr                  # IfExpression
   | left=expr '?' then=expr ':' else=expr               # TernaryExpression
@@ -162,8 +146,8 @@ expr
   | NUMBER_INT                                          # IntegerExpression
   | STR_LIT                                             # StringExpression
   | postfixExpr                                         # PostfixExpression
-  | prefixStmt                                          # PrefixExpression
-  | compoundAssignmentStmt                              # CompoundAssignmentExpression
+  | prefixExpr                                          # PrefixExpression
+  | compoundAssignmentExpr                              # CompoundAssignmentExpression
   | WRITE '(' argList? ')'                              # WriteExpression
   | READ '(' argList? ')'                               # ReadExpression
   | ID_PASCAL '(' argList? ')'                          # CallExpression
@@ -174,17 +158,18 @@ expr
   | '(' expr ')'                                        # ParensExpression
   ;
 
-listLiteral
-  : '[' expr (',' expr)* ']'
-  | '[' ']'
+postfixExpr
+  : ID INC                                              # PostfixIncrement
+  | ID DEC                                              # PostfixDecrement
   ;
 
-listAccess
-  : ID '[' expr ']'
+prefixExpr
+  : INC ID                                              # PrefixIncrement
+  | DEC ID                                              # PrefixDecrement
   ;
 
-listCall
-  : instance=ID '.' method=(ID | ID_PASCAL) '(' argList? ')'
+compoundAssignmentExpr
+  : ID (CA_ADD|CA_SUB|CA_MUL|CA_DIV|CA_MOD) expr        # CompoundAssignment
   ;
 
 argList
@@ -196,10 +181,12 @@ DOUBLE: 'double';
 DECIMAL: 'decimal';
 BOOL: 'bool';
 STRING: 'string';
+OBJECT: 'object';
 VOID: 'void';
 WRITE: 'Write';
 READ: 'Read';
 VAR: 'var';
+NULL: 'null';
 
 NUMBER_DECIMAL: [0-9]+ '.' [0-9]+ [mM];
 NUMBER_DOUBLE:  [0-9]+ '.' [0-9]+ ([dD])?;
