@@ -19,6 +19,13 @@ internal static class VariantExtensions
                 _ => throw new InvalidOperationException("Unsupported type inference.")
             };
         }
+
+        internal int ToIntegerIndex()
+        {
+            return variant is LongType longVariant
+                ? checked((int)longVariant.Value)
+                : throw new InvalidOperationException("List indexes must evaluate to an integer.");
+        }
     }
 
     extension(ListType variant)

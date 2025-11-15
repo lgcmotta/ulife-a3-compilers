@@ -23,12 +23,12 @@ public sealed partial class MShellVisitor
     {
         var cond = Visit(context.condition);
 
-        if (cond is not BooleanType boolCond)
+        if (cond is not BooleanType boolean)
         {
             throw new InvalidOperationException("The 'if' statement condition must evaluate to a bool.");
         }
 
-        if (boolCond)
+        if (boolean)
         {
             return Visit(context.then);
         }
@@ -57,12 +57,12 @@ public sealed partial class MShellVisitor
         {
             var condition = Visit(context.condition);
 
-            if (condition is not BooleanType boolCondition)
+            if (condition is not BooleanType boolean)
             {
                 throw new InvalidOperationException("The 'while' statement condition must evaluate to a bool.");
             }
 
-            if (!boolCondition.Value)
+            if (!boolean.Value)
             {
                 break;
             }
@@ -81,12 +81,12 @@ public sealed partial class MShellVisitor
         {
             var condition = Visit(context.condition);
 
-            if (condition is not BooleanType boolCondition)
+            if (condition is not BooleanType boolean)
             {
                 throw new InvalidOperationException("The 'while' statement condition must evaluate to a bool.");
             }
 
-            if (!boolCondition.Value)
+            if (!boolean.Value)
             {
                 break;
             }
@@ -95,5 +95,44 @@ public sealed partial class MShellVisitor
         } while (true);
 
         return last;
+    }
+
+    public override IVariant VisitForStatement(MShellParser.ForStatementContext context)
+    {
+        _context.Variables.Push([]);
+
+        try
+        {
+            if (context.init is not null)
+            {
+                Visit(context.init);
+            }
+
+            IVariant last = LongType.Zero;
+
+            while (EvaluateCondition())
+            {
+                last = Visit(context.body);
+
+                Visit(context.iteration());
+            }
+
+            return last;
+
+            bool EvaluateCondition()
+            {
+                if (context.condition is null) return false;
+
+                var condition = Visit(context.condition);
+
+                return condition is not BooleanType boolean
+                    ? throw new InvalidOperationException("The condition for the 'for' statement must evaluate to a bool.")
+                    : boolean.Value;
+            }
+        }
+        finally
+        {
+            _context.Variables.Pop();
+        }
     }
 }
