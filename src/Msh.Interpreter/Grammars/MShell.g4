@@ -70,8 +70,8 @@ variable
     ;
 
 variableInline
-    : type ID assignment                                                # StronglyTypedVariable
-    | VAR ID assignment                                                 # InferredTypedVariable
+    : type ID ASSIGN expression                                         # StronglyTypedVariable
+    | VAR ID ASSIGN expression                                          # InferredTypedVariable
     ;
 
 assignment
@@ -83,9 +83,9 @@ assignment
     ;
 
 target
-  : ID
-  | indexer
-  ;
+    : ID
+    | indexer
+    ;
 
 expression
     : ID                                                                # VarExpression
