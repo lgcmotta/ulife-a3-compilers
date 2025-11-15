@@ -126,5 +126,35 @@ public static class VariantArithmeticExtensions
                 _ => throw new OperationNotSupportedException(nameof(Divide))
             };
         }
+
+        internal IVariant Modulus(IVariant other)
+        {
+            if (variant is ListType left && other is ListType right)
+            {
+                return left.ZipAndCalculate(right, Modulus);
+            }
+
+            if (!variant.IsScalarValue() || !other.IsScalarValue())
+            {
+                throw new UnsupportedOperationException(nameof(Modulus), variant.Kind, other.Kind);
+            }
+
+            return variant switch
+            {
+                LongType l when other is LongType r => l % r,
+                LongType l when other is DoubleType r => new DoubleType(l.Value % r.Value),
+                LongType l when other is DecimalType r => new DecimalType(l.Value % r.Value),
+
+                DoubleType l when other is LongType r => new DoubleType(l.Value % r.Value),
+                DoubleType l when other is DoubleType r => l % r,
+                DoubleType l when other is DecimalType r => new DecimalType((decimal)l.Value % r.Value),
+
+                DecimalType l when other is LongType r => new DecimalType(l.Value % r.Value),
+                DecimalType l when other is DoubleType r => new DecimalType(l.Value % (decimal)r.Value),
+                DecimalType l when other is DecimalType r => l % r,
+
+                _ => throw new OperationNotSupportedException(nameof(Modulus))
+            };
+        }
     }
 }

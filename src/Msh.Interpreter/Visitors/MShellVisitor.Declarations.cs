@@ -81,11 +81,14 @@ public sealed partial class MShellVisitor
     public override IVariant VisitDefaultAssignment(MShellParser.DefaultAssignmentContext context)
     {
         var value = Visit(context.expression());
+
         var target = context.target();
 
         if (target.indexer() is { } indexer)
         {
-            IndexerAssignment(indexer, Visit(context.expression()));
+            IndexerAssignment(indexer, value, (_, list, index) => list.Items[index] = value);
+
+            return LongType.Zero;
         }
 
         var name = target.ID().GetText();
@@ -99,7 +102,121 @@ public sealed partial class MShellVisitor
         return LongType.Zero;
     }
 
-    private void IndexerAssignment(MShellParser.IndexerContext indexerContext, IVariant newValue)
+    public override IVariant VisitCompoundAssignment(MShellParser.CompoundAssignmentContext context)
+    {
+        var value = Visit(context.expression());
+
+        var target = context.target();
+
+        var @operator = context.ResolveOperator();
+
+        if (target.indexer() is { } indexer)
+        {
+            IndexerAssignment(indexer, value, (_, list, index) =>
+            {
+                var current = list.Items[index];
+                list.Items[index] = current.CompoundAssignment(value, @operator);
+            });
+
+            return LongType.Zero;
+        }
+
+        var name = target.ID().GetText();
+
+        var variable = _context.ResolveVariable(name);
+
+        var result = variable.Variant.CompoundAssignment(value, @operator);
+
+        variable.EnsureTypeCompatibility(result.InferTypeName());
+
+        variable.OverrideVariant(result);
+
+        return LongType.Zero;
+    }
+
+    public override IVariant VisitPrefixAssignment(MShellParser.PrefixAssignmentContext context)
+    {
+        var op = context.ResolveOperator();
+
+        var target = context.target();
+
+        if (target.indexer() is { } indexer)
+        {
+            IVariant? result = null;
+
+            IndexerAssignment(indexer, null, (variable, list, idx) =>
+            {
+                var current = list.Items[idx];
+
+                var mutated = current.MutateUnary(op);
+
+                var expected = variable.InferIndexedType(indexer.expression().Length);
+
+                variable.EnsureTypeCompatibility(mutated.InferTypeName(), expected);
+
+                list.Items[idx] = mutated;
+
+                result = mutated;
+
+            });
+
+            return result ?? LongType.Zero;
+        }
+
+        var variable = _context.ResolveVariable(target.ID().GetText());
+
+        var mutated = variable.Variant.MutateUnary(op);
+
+        variable.EnsureTypeCompatibility(mutated.InferTypeName());
+
+        variable.OverrideVariant(mutated);
+
+        return mutated;
+    }
+
+    public override IVariant VisitPostfixAssignment(MShellParser.PostfixAssignmentContext context)
+    {
+        var op = context.ResolveOperator();
+
+        var target = context.target();
+
+        if (target.indexer() is { } indexer)
+        {
+            IVariant? result = null;
+
+            IndexerAssignment(indexer, null, (variable, list, idx) =>
+            {
+                var current = list.Items[idx];
+
+                var mutated = current.MutateUnary(op);
+
+                var expected = variable.InferIndexedType(indexer.expression().Length);
+
+                variable.EnsureTypeCompatibility(mutated.InferTypeName(), expected);
+
+                list.Items[idx] = mutated;
+
+                result = current;
+
+            });
+
+            return result ?? LongType.Zero;
+        }
+
+        var variable = _context.ResolveVariable(target.ID().GetText());
+
+        var current = variable.Variant;
+
+        var mutated = variable.Variant.MutateUnary(op);
+
+        variable.EnsureTypeCompatibility(mutated.InferTypeName());
+
+        variable.OverrideVariant(mutated);
+
+        return current;
+    }
+
+    private void IndexerAssignment(MShellParser.IndexerContext indexerContext, IVariant? newValue, Action<VariableDefinition, ListType, int> assign)
     {
         var variable = _context.ResolveVariable(indexerContext.ID().GetText());
 
@@ -119,11 +236,14 @@ public sealed partial class MShellVisitor
             throw new InvalidOperationException("List index is out of range.");
         }
 
-        var expectedType = variable.InferIndexedType(indices.Length);
+        if (newValue is not null)
+        {
+            var expectedType = variable.InferIndexedType(indices.Length);
 
-        variable.EnsureTypeCompatibility(newValue.InferTypeName(), expectedType);
+            variable.EnsureTypeCompatibility(newValue.InferTypeName(), expectedType);
+        }
 
-        parentList.Items[lastIndex] = newValue;
+        assign(variable, parentList, lastIndex);
     }
 
     private ListType ResolveTargetList(VariableDefinition variable, MShellParser.ExpressionContext[] indexes)
@@ -146,8 +266,7 @@ public sealed partial class MShellVisitor
             current = parentList.Items[index];
         }
 
-        parentList ??= current as ListType
-                       ?? throw new InvalidOperationException("Target is not a list.");
+        parentList ??= current as ListType ?? throw new InvalidOperationException("Target is not a list.");
 
         return parentList;
     }

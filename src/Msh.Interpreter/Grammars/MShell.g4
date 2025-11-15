@@ -3,8 +3,8 @@ grammar MShell;
 prog: item* EOF;
 
 item
-    : function      # FunctionDefinition
-    | statement     # StatementDefinition
+    : function                                                       # FunctionDefinition
+    | statement                                                      # StatementDefinition
     ;
 
 function
@@ -79,7 +79,6 @@ assignment
     | target (CA_ADD|CA_SUB|CA_MUL|CA_DIV|CA_MOD) expression            # CompoundAssignment
     | (INC|DEC) target                                                  # PrefixAssignment
     | target (INC|DEC)                                                  # PostfixAssignment
-    | target ASSIGN NULL                                                # NullAssignment
     ;
 
 target
@@ -97,11 +96,12 @@ expression
     | SUB expression                                                    # UnaryMinusExpression
     | left=expression operation=(MUL|DIV) right=expression              # MulDivExpression
     | left=expression operation=(ADD|SUB) right=expression              # AddSubExpression
+    | left=expression operation=MOD right=expression                    # ModulusExpression
     | STRING_LITERAL                                                    # StringExpression
     | BOOL_LITERAL                                                      # BoolExpression
-    | NUMBER_INT                                                        # IntegerExpression
-    | NUMBER_DOUBLE                                                     # DoubleExpression
-    | NUMBER_DECIMAL                                                    # DecimalExpression
+    | INT_LITERAL                                                        # IntegerExpression
+    | DOUBLE_LITERAL                                                     # DoubleExpression
+    | DECIMAL_LITERAL                                                    # DecimalExpression
     | invoke                                                            # InvokeExpression
     | list                                                              # ListLiteralExpression
     | indexer                                                           # IndexerExpression
@@ -129,7 +129,7 @@ indexer
     ;
 
 listMethod
-    : instance=ID '.' method=(ID | ID_PASCAL) '(' arguments? ')'
+    : instance=ID '.' method=ID_PASCAL '(' arguments? ')'
     ;
 
 statementOrBlock
@@ -138,8 +138,8 @@ statementOrBlock
     ;
 
 type
-    : baseType ('[' ']')*                                   # TypeCompositeBase
-    | VOID                                                  # TypeVoid
+    : baseType ('[' ']')*                                               # TypeCompositeBase
+    | VOID                                                              # TypeVoid
     ;
 
 baseType
@@ -152,7 +152,6 @@ baseType
   ;
 
 // Types:
-NULL: 'null';
 INT: 'int';
 DOUBLE: 'double';
 DECIMAL: 'decimal';
@@ -167,9 +166,9 @@ WRITE: 'Write';
 READ: 'Read';
 
 // Literals
-NUMBER_DECIMAL: [0-9]+ '.' [0-9]+ [mM];
-NUMBER_DOUBLE:  [0-9]+ '.' [0-9]+ ([dD])?;
-NUMBER_INT:     [0-9]+;
+DECIMAL_LITERAL: [0-9]+ '.' [0-9]+ [mM];
+DOUBLE_LITERAL:  [0-9]+ '.' [0-9]+ ([dD])?;
+INT_LITERAL:     [0-9]+;
 BOOL_LITERAL: 'true' | 'false';
 STRING_LITERAL: '"' ( ~["\\\r\n] | '\\' . )* '"';
 

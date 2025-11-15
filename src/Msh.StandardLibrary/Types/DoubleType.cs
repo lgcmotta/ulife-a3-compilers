@@ -15,6 +15,7 @@ public sealed class DoubleType : Variant<DoubleType>, IVariant
     public double Value { get; }
 
     public static IVariant Zero => new DoubleType(0D);
+    public static IVariant One => new DoubleType(1D);
 
     public static DoubleType operator +(DoubleType left, DoubleType right) => new(left.Value + right.Value);
     public static DoubleType operator -(DoubleType left, DoubleType right) => new(left.Value - right.Value);
@@ -24,6 +25,13 @@ public sealed class DoubleType : Variant<DoubleType>, IVariant
     {
         return right.Value != 0D
             ? new DoubleType(left.Value / right.Value)
+            : throw new DivideByZeroException();
+    }
+
+    public static DoubleType operator %(DoubleType left, DoubleType right)
+    {
+        return right.Value != 0D
+            ? new DoubleType(left.Value % right.Value)
             : throw new DivideByZeroException();
     }
 

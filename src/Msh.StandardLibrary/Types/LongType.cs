@@ -29,6 +29,13 @@ public sealed class LongType : Variant<LongType>, IVariant
             : throw new DivideByZeroException();
     }
 
+    public static LongType operator %(LongType left, LongType right)
+    {
+        return right.Value is not 0L
+            ? new LongType(left.Value % right.Value)
+            : throw new DivideByZeroException();
+    }
+
     public static bool operator ==(LongType? left, LongType? right)
     {
         if (ReferenceEquals(left, right))

@@ -29,6 +29,13 @@ public sealed class DecimalType : Variant<DecimalType>, IVariant
             : throw new DivideByZeroException();
     }
 
+    public static DecimalType operator %(DecimalType left, DecimalType right)
+    {
+        return right.Value != decimal.Zero
+            ? new DecimalType(decimal.Remainder(left.Value, right.Value))
+            : throw new DivideByZeroException();
+    }
+
     public static bool operator ==(DecimalType? left, DecimalType? right)
     {
         if (ReferenceEquals(left, right))
