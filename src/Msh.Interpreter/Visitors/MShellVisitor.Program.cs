@@ -1,6 +1,8 @@
 ﻿using Antlr4BuildTasks;
 
+using Msh.Interpreter.Definitions;
 using Msh.Interpreter.Exceptions;
+using Msh.Interpreter.Extensions;
 using Msh.StandardLibrary.Types;
 
 namespace Msh.Interpreter.Visitors;
@@ -13,11 +15,11 @@ public sealed partial class MShellVisitor
         {
             switch (item)
             {
-                case MShellParser.FuncDefStatementContext funcDef:
+                case MShellParser.FunctionDefinitionContext funcDef:
                     Visit(funcDef);
                     continue;
-                case MShellParser.StatementContext statement:
-                    _context.Statements.Enqueue(statement.stat());
+                case MShellParser.StatementDefinitionContext statement:
+                    _context.Statements.Enqueue(statement.statement());
                     continue;
             }
         }
@@ -27,6 +29,34 @@ public sealed partial class MShellVisitor
         _context.Statements.Clear();
 
         return result;
+    }
+
+    public override IVariant VisitFunction(MShellParser.FunctionContext context)
+    {
+        var name = context.ID_PASCAL().GetText();
+
+        if (_context.Functions.ContainsKey(name))
+        {
+            throw new InvalidOperationException($"Function '{name}' is already defined.");
+        }
+
+        var returnType = context.type().NormalizeType();
+
+        var parameters = context.paramList().ToParameterDefinitions();
+
+        _context.Functions[name] = new FunctionDefinition(returnType, parameters, context.block());
+
+        return LongType.Zero;
+    }
+
+    public override IVariant VisitBlock(MShellParser.BlockContext context)
+    {
+        return _context.ExecuteBlock(context, null, Visit);
+    }
+
+    public override IVariant VisitStatementOrBlock(MShellParser.StatementOrBlockContext context)
+    {
+        return context.block() is { } block ? VisitBlock(block) : Visit(context.statement());
     }
 
     private IVariant ExecuteProgram()

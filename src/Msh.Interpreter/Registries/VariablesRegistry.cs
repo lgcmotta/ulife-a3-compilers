@@ -1,5 +1,5 @@
-﻿using Msh.Interpreter.Definitions;
+﻿using Msh.Interpreter.Scopes;
 
 namespace Msh.Interpreter.Registries;
 
-internal class VariablesRegistry : Dictionary<string, VariableDefinition>;
+internal class VariablesRegistry : Stack<VariablesScope>;
