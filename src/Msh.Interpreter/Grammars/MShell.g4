@@ -91,7 +91,7 @@ expression
     | left=expression '?' then=expression ':' else=expression           # TernaryExpression
     | left=expression OR right=expression                               # OrExpression
     | left=expression AND right=expression                              # AndExpression
-    | left=expression operator=(EQ|NEQ|LT|LE|GT|GE) right=expression    # CompareExpression
+    | left=expression operator=(EQ|NEQ|LT|LTE|GT|GTE) right=expression  # CompareExpression
     | <assoc=right> left=expression operator=POW right=expression       # PowExpression
     | SUB expression                                                    # UnaryMinusExpression
     | left=expression operation=(MUL|DIV) right=expression              # MulDivExpression
@@ -99,9 +99,9 @@ expression
     | left=expression operation=MOD right=expression                    # ModulusExpression
     | STRING_LITERAL                                                    # StringExpression
     | BOOL_LITERAL                                                      # BoolExpression
-    | INT_LITERAL                                                        # IntegerExpression
-    | DOUBLE_LITERAL                                                     # DoubleExpression
-    | DECIMAL_LITERAL                                                    # DecimalExpression
+    | INT_LITERAL                                                       # IntegerExpression
+    | DOUBLE_LITERAL                                                    # DoubleExpression
+    | DECIMAL_LITERAL                                                   # DecimalExpression
     | invoke                                                            # InvokeExpression
     | list                                                              # ListLiteralExpression
     | indexer                                                           # IndexerExpression
@@ -202,6 +202,6 @@ AND: '&&';
 EQ: '==';
 NEQ: '!=';
 LT: '<';
-LE: '<=';
+LTE: '<=';
 GT: '>';
-GE: '>=';
+GTE: '>=';

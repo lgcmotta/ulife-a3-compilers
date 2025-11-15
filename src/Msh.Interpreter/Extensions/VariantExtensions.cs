@@ -1,4 +1,6 @@
-﻿using Msh.StandardLibrary.Exceptions;
+﻿using System.Globalization;
+
+using Msh.StandardLibrary.Exceptions;
 using Msh.StandardLibrary.Mathematics;
 using Msh.StandardLibrary.Operators;
 using Msh.StandardLibrary.Types;
@@ -24,6 +26,33 @@ internal static class VariantExtensions
             };
         }
 
+        internal string FormatInterpolationValue(string? precision)
+        {
+            if (precision is null)
+            {
+                return variant switch
+                {
+                    StringType s => s.Value,
+                    BooleanType b => b.Value.ToString().ToLowerInvariant(),
+                    LongType l => l.Value.ToString(CultureInfo.InvariantCulture),
+                    DoubleType d => d.Value.ToString(CultureInfo.InvariantCulture),
+                    DecimalType m => m.Value.ToString(CultureInfo.InvariantCulture),
+                    ListType list => $"[{string.Join(", ", list.Select(v => FormatInterpolationValue(v, null)))}]",
+                    _ => variant.ToString()
+                } ?? string.Empty;
+            }
+
+            return int.TryParse(precision, NumberStyles.Integer, CultureInfo.InvariantCulture, out var digits)
+                ? variant switch
+                {
+                    DoubleType d => d.Value.ToString($"F{digits}", CultureInfo.InvariantCulture),
+                    DecimalType m => m.Value.ToString($"F{digits}", CultureInfo.InvariantCulture),
+                    LongType l => l.Value.ToString(CultureInfo.InvariantCulture), // precision ignored
+                    _ => throw new InvalidOperationException("Precision specifier is only supported for numeric values.")
+                }
+                : throw new InvalidOperationException($"Invalid precision specifier '{precision}'.");
+        }
+
         internal int ToIntegerIndex()
         {
             return variant is LongType longVariant
@@ -35,6 +64,21 @@ internal static class VariantExtensions
             where TVariant : class, IVariant
         {
             return variant as TVariant ?? throw new InvalidVariantCastException(typeof(TVariant).Name);
+        }
+
+        internal IVariant ReverseSign()
+        {
+            return variant.Kind switch
+            {
+                Kind.Long => new LongType(-variant.Cast<LongType>().Value),
+                Kind.Double => new DoubleType(-variant.Cast<DoubleType>().Value),
+                Kind.Decimal => new DecimalType(-variant.Cast<DecimalType>().Value),
+                Kind.Bool => !variant.Cast<BooleanType>(),
+                Kind.List => new ListType(variant.Cast<ListType>().Select(ReverseSign)),
+                Kind.String => new StringType(new string([..variant.Cast<StringType>().Value.Reverse()])),
+                Kind.Object => throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
+            };
         }
 
         internal IVariant MutateUnary(string op)
