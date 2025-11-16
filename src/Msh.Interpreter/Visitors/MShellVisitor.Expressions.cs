@@ -172,6 +172,11 @@ public sealed partial class MShellVisitor
 
         var name = bracketIndex >= 0 ? token[..bracketIndex] : token;
 
+        if (name.TryParseVariant(out var literal) && literal is not null)
+        {
+            return literal;
+        }
+
         var variable = _context.ResolveVariable(name);
 
         if (bracketIndex < 0)

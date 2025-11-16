@@ -17,6 +17,11 @@ internal class RuntimeContext
 
     internal StatementScope Statements { get; } = [];
 
+    internal RuntimeContext()
+    {
+        Variables.Push([]);
+    }
+
     internal IVariant ExecuteBlock(MShellParser.BlockContext context,
         VariablesScope? seed,
         Func<IParseTree, IVariant> visit)
@@ -48,10 +53,14 @@ internal class RuntimeContext
 
     internal VariableDefinition ResolveVariable(string name)
     {
-        var scope = Variables.Peek();
+        foreach (var scope in Variables)
+        {
+            if (scope.TryGetValue(name, out var variable))
+            {
+                return variable;
+            }
+        }
 
-        return scope.TryGetValue(name, out var variable)
-            ? variable
-            : throw new InvalidOperationException($"Variable '{name}' does not exist in the current scope.");
+        throw new InvalidOperationException($"Variable '{name}' does not exist in the current scope.");
     }
 }

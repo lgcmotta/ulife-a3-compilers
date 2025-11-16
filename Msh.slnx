@@ -9,6 +9,7 @@
     <File Path="README.md" />
   </Folder>
 	<Folder Name="/src/">
+	  <Project Path="src/MSH.CLI/MSH.CLI.csproj" />
 	  <Project Path="src/Msh.Interpreter/Msh.Interpreter.csproj" />
     <Project Path="src/Msh.StandardLibrary/Msh.StandardLibrary.csproj" />
   </Folder>
