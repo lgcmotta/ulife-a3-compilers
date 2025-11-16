@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Msh.Interpreter</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" />
+    <PackageReference Include="Antlr4BuildTasks" />
+    <PackageReference Include="JetBrains.Annotations" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include=".\Grammars\MShell.g4" Package="Antlr4BuildTasks" Listener="true" Visitor="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Msh.StandardLibrary\Msh.StandardLibrary.csproj" />
+  </ItemGroup>
+
+</Project>
