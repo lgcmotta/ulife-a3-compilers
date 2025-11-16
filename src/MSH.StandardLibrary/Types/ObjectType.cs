@@ -11,7 +11,7 @@ public sealed class ObjectType : Variant<ObjectType>, IVariant
 
     public object Value { get; }
 
-    public static IVariant Null => new ObjectType(null);
+    public static IVariant Null => new ObjectType(new object());
 
     public static bool operator ==(ObjectType? left, ObjectType? right)
     {
