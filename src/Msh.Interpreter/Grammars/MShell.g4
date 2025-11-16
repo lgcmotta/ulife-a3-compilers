@@ -110,9 +110,9 @@ expression
     ;
 
 invoke
-    : ID_PASCAL '(' arguments ')'                                       # InvokeFunctionExpression
-    | READ '(' ')'                                                      # ReadValueExpression
+    : READ '(' ')'                                                      # ReadValueExpression
     | WRITE '(' arguments? ')'                                          # WriteValueExpression
+    | ID_PASCAL '(' arguments? ')'                                      # InvokeFunctionExpression
     ;
 
 arguments
