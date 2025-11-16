@@ -6,13 +6,12 @@ using Antlr4BuildTasks;
 
 using Cocona;
 
-using MSH.CLI.Terminals;
-
+using Msh.CommandLineInterface.Terminals;
 using Msh.Interpreter.Visitors;
 
 using Spectre.Console;
 
-namespace MSH.CLI.Commands;
+namespace Msh.CommandLineInterface.Commands;
 
 internal static class REPL
 {

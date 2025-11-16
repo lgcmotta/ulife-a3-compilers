@@ -1,8 +1,7 @@
 using Cocona;
 
-using MSH.CLI.Commands;
-using MSH.CLI.Terminals;
-
+using Msh.CommandLineInterface.Commands;
+using Msh.CommandLineInterface.Terminals;
 using Msh.Interpreter.Abstractions;
 
 using Spectre.Console;

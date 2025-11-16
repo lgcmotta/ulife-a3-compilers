@@ -4,7 +4,7 @@ using Msh.Interpreter.Abstractions;
 
 using Spectre.Console;
 
-namespace MSH.CLI.Terminals;
+namespace Msh.CommandLineInterface.Terminals;
 
 [UsedImplicitly]
 public class ConsoleTerminal : ITerminal

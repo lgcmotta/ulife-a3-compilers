@@ -10,6 +10,7 @@
     <StripSymbols>false</StripSymbols>
     <AssemblyName>msh</AssemblyName>
     <OutputType>Exe</OutputType>
+    <RootNamespace>Msh.CommandLineInterface</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
