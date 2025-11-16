@@ -1,8 +1,10 @@
-﻿namespace Msh.StandardLibrary.Mathematics;
+﻿using Msh.StandardLibrary.Types;
 
-using static MathFunctionArgumentsHelper;
+namespace Msh.StandardLibrary.Mathematics;
 
-public sealed class Functions : Dictionary<string, MathFunction>
+using static FunctionHelper;
+
+public sealed class Functions : Dictionary<string, Function>
 {
     private static readonly Lazy<Functions> Instance = new(() => new Functions(), isThreadSafe: true);
 

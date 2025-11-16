@@ -33,6 +33,7 @@ statement
     | doWhileStatement
     | forStatement
     | invoke ';'
+    | listMethod ';'
     ;
 
 return
@@ -103,9 +104,9 @@ expression
     | DOUBLE_LITERAL                                                    # DoubleExpression
     | DECIMAL_LITERAL                                                   # DecimalExpression
     | invoke                                                            # InvokeExpression
+    | listMethod                                                        # ListMethodExpression
     | list                                                              # ListLiteralExpression
     | indexer                                                           # IndexerExpression
-    | listMethod                                                        # ListMethodExpression
     | '(' expression ')'                                                # ParenthesisExpression
     ;
 
@@ -129,7 +130,7 @@ indexer
     ;
 
 listMethod
-    : instance=ID '.' method=ID_PASCAL '(' arguments? ')'
+    : instance=ID '.' method=(LIST_ADD|LIST_REMOVE_AT|LIST_INSERT|LIST_CLEAR|LIST_SIZE) '(' arguments? ')'
     ;
 
 statementOrBlock
@@ -160,6 +161,13 @@ STRING: 'string';
 OBJECT: 'object';
 VOID: 'void';
 VAR: 'var';
+
+// List Mehods
+LIST_ADD: 'Add';
+LIST_REMOVE_AT: 'RemoveAt';
+LIST_INSERT: 'Insert';
+LIST_CLEAR: 'Clear';
+LIST_SIZE: 'Size';
 
 // Standard IO
 WRITE: 'Write';

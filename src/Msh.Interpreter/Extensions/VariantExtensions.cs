@@ -20,7 +20,7 @@ internal static class VariantExtensions
                 Kind.Decimal => "decimal",
                 Kind.Bool => "bool",
                 Kind.String => "string",
-                Kind.List => $"{InferElementType((ListType)variant)}[]",
+                Kind.List => $"{variant.Cast<ListType>().InferElementType()}[]",
                 Kind.Object => throw new InvalidOperationException("Unsupported type inference."),
                 _ => throw new InvalidOperationException("Unsupported type inference.")
             };
@@ -160,23 +160,6 @@ internal static class VariantExtensions
                 LongType or DoubleType or DecimalType when other is LongType or DoubleType or DecimalType => variant.Modulus(other),
                 _ => throw new InvalidOperationException("Compound assignment '%=' requires numeric types.")
             };
-        }
-    }
-
-    extension(ListType variant)
-    {
-        private string InferElementType()
-        {
-            if (variant.Count is 0)
-            {
-                throw new InvalidOperationException("Cannot infer type from an empty list.");
-            }
-
-            var elementTypes = variant.Select(InferTypeName).Distinct().ToArray();
-
-            return elementTypes is { Length: 1 }
-                ? elementTypes[0]
-                : throw new InvalidOperationException("List elements must have the same inferred type.");
         }
     }
 }
