@@ -14,6 +14,11 @@ public static class VariantArithmeticExtensions
                 return left.ZipAndCalculate(right, Add);
             }
 
+            if (variant is StringType leftStr && other is StringType rightStr)
+            {
+                return leftStr + rightStr;
+            }
+
             if (!variant.IsScalarValue() || !other.IsScalarValue())
             {
                 throw new UnsupportedOperationException(nameof(Add), variant.Kind, other.Kind);
