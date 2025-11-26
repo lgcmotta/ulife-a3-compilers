@@ -15,6 +15,5 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MSH.Interpreter.Tests/MSH.Interpreter.Tests.csproj" />
-    <Project Path="tests/MSH.StandardLibrary.Tests/MSH.StandardLibrary.Tests.csproj" />
   </Folder>
 </Solution>

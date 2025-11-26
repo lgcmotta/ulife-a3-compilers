@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <PublishAot>true</PublishAot>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <StripSymbols>false</StripSymbols>
-    <AssemblyName>msh</AssemblyName>
     <OutputType>Exe</OutputType>
+    <IsPackable>true</IsPackable>
+    <StripSymbols>false</StripSymbols>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>msh</ToolCommandName>
+    <PackageId>MottaShell.A3.CommandLineInterface</PackageId>
     <RootNamespace>Msh.CommandLineInterface</RootNamespace>
   </PropertyGroup>
 

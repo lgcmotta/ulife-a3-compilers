@@ -1,19 +1,16 @@
 using Cocona;
 
 using Msh.CommandLineInterface.Commands;
-using Msh.CommandLineInterface.Terminals;
-using Msh.Interpreter.Abstractions;
-
-using Spectre.Console;
+using Msh.CommandLineInterface.Extensions;
 
 var builder = CoconaApp.CreateBuilder(args);
 
-builder.Services.AddSingleton<IAnsiConsole>(_ => AnsiConsole.Console);
-builder.Services.AddSingleton<ITerminal, ConsoleTerminal>(provider => new ConsoleTerminal(provider.GetRequiredService<IAnsiConsole>()));
-builder.Services.AddSingleton<ConsoleTerminal>(provider => new ConsoleTerminal(provider.GetRequiredService<IAnsiConsole>()));
+builder.Services.AddAnsiConsole();
+builder.Services.AddConsoleTerminal();
 
 var app = builder.Build();
 
+app.AddRunCommand();
 app.AddREPLCommand();
 
 await app.RunAsync();
