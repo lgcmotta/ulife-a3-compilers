@@ -9,6 +9,9 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/publish.yml" />
+  </Folder>
 	<Folder Name="/src/">
 	  <Project Path="src/MSH.CLI/MSH.CLI.csproj" />
 	  <Project Path="src/MSH.Interpreter/MSH.Interpreter.csproj" />
