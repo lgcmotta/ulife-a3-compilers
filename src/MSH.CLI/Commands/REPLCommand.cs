@@ -23,6 +23,7 @@ internal static class REPLCommand
             app.AddCommand(name: "repl", async Task<long> (ConsoleTerminal terminal, CoconaAppContext ctx) =>
             {
                 terminal.WriteWelcomeMessage();
+                terminal.WriteInstructions();
 
                 var visitor = new MShellVisitor(terminal);
 
@@ -36,6 +37,20 @@ internal static class REPLCommand
 
                         buffer.AppendLine(line);
 
+                        if (buffer.IsExitingREPL())
+                        {
+                            break;
+                        }
+
+                        if (buffer.IsCleaningTerminal())
+                        {
+                            terminal.Console.Clear();
+                            buffer.Clear();
+                            terminal.WriteWelcomeMessage();
+                            terminal.WriteInstructions();
+                            continue;
+                        }
+
                         if (!buffer.IsStatementComplete())
                         {
                             continue;
@@ -44,8 +59,6 @@ internal static class REPLCommand
                         var content = buffer.ToString();
 
                         buffer.Clear();
-
-                        // if (content is )
 
                         var input = new AntlrInputStream(content.ReplaceLineEndings(string.Empty));
 

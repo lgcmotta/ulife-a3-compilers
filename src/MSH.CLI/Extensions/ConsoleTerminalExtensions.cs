@@ -14,6 +14,12 @@ internal static class ConsoleTerminalExtensions
             terminal.WriteLine("Welcome to [yellow]msh[/] REPL ([green]Read, Eval, Print and Loop!)[/]");
         }
 
+        internal void WriteInstructions()
+        {
+            terminal.Console.MarkupLine("Type [yellow]clear[/] to clean the terminal.");
+            terminal.Console.MarkupLine("Type [red]exit[/] to exit the quit REPL mode.");
+        }
+
         internal async Task<string?> PromptLineAsync(CancellationToken cancellationToken = default)
         {
             return await terminal.Console.PromptAsync(new TextPrompt<string>("[yellow]>[/]"), cancellationToken: cancellationToken);

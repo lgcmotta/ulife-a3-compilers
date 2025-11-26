@@ -39,5 +39,39 @@ internal static class StringBuilderExtensions
 
             return braceBalance <= 0 && lastNonWhitespace is ';' or '}';
         }
+
+        internal bool IsExitingREPL()
+        {
+            var chunks = buffer.GetChunks();
+
+            while (chunks.MoveNext())
+            {
+                ReadOnlySpan<char> span = chunks.Current.Span;
+
+                if (span.StartsWith("exit") && span.EndsWith(Environment.NewLine))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal bool IsCleaningTerminal()
+        {
+            var chunks = buffer.GetChunks();
+
+            while (chunks.MoveNext())
+            {
+                ReadOnlySpan<char> span = chunks.Current.Span;
+
+                if (span.StartsWith("clear") && span.EndsWith(Environment.NewLine))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
