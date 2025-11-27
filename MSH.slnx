@@ -11,6 +11,7 @@
   </Folder>
   <Folder Name="/Solution Items/.github/workflows/">
     <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/sonar.yml" />
   </Folder>
   <Folder Name="/Solution Items/docs/">
     <File Path="docs/README.md" />

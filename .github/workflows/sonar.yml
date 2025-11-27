@@ -1,0 +1,72 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  sonar:
+    name: Run SonarCloud Analysis
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install Sonar Scanner
+        shell: bash
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Begin SonarCloud Analysis
+        shell: bash
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          QUALITY_GATE_WAIT: true
+        run: |
+          dotnet-sonarscanner begin \
+          /k:"$SONAR_PROJECT_KEY" \
+          /o:"$SONAR_ORGANIZATION" \
+          /d:sonar.branch.name="$BRANCH_NAME" \
+          /d:sonar.token="$SONAR_TOKEN" \
+          /d:sonar.host.url="$SONAR_HOST_URL" \
+          /d:sonar.qualitygate.wait=$QUALITY_GATE_WAIT \
+          /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml" \
+          /d:sonar.scanner.scanAll=false
+
+      - name: .NET Restore
+        shell: bash
+        run: dotnet restore
+
+      - name: .NET Build
+        shell: bash
+        run: dotnet build --no-restore -c Release
+
+      - name: .NET Test
+        shell: bash
+        run: |
+          dotnet test --no-build \
+          --no-restore \
+          --configuration Release -- \
+          --coverage \
+          --coverage-output-format xml \
+          --coverage-output coverage.xml
+
+      - name: End SonarCloud Analysis
+        shell: bash
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
