@@ -19,6 +19,9 @@
   <Folder Name="/Solution Items/docs/">
     <File Path="docs/README.md" />
   </Folder>
+  <Folder Name="/Solution Items/samples/">
+    <File Path="samples/hello_world.ms" />
+  </Folder>
   <Folder Name="/Solution Items/scripts/">
     <File Path="scripts/configuration.winget" />
   </Folder>
