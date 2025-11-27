@@ -89,10 +89,10 @@ target
 
 expression
     : ID                                                                # VarExpression
-    | left=expression '?' then=expression ':' else=expression           # TernaryExpression
     | left=expression OR right=expression                               # OrExpression
     | left=expression AND right=expression                              # AndExpression
     | left=expression operator=(EQ|NEQ|LT|LTE|GT|GTE) right=expression  # CompareExpression
+    | left=expression '?' then=expression ':' else=expression           # TernaryExpression
     | <assoc=right> left=expression operator=POW right=expression       # PowExpression
     | SUB expression                                                    # UnaryMinusExpression
     | left=expression operation=(MUL|DIV) right=expression              # MulDivExpression
