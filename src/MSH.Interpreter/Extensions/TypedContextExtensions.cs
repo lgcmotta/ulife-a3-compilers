@@ -17,22 +17,19 @@ internal static class TypedContextExtensions
         {
             var type = context.NormalizeType();
 
-            if (type is "void")
-            {
-                throw new InvalidOperationException("Type void has no default value.");
-            }
-
-            return type switch
-            {
-                "int" => LongType.Zero,
-                "double" => DoubleType.Zero,
-                "decimal" => DecimalType.Zero,
-                "bool" => BooleanType.False,
-                "string" => StringType.Empty,
-                "object" => ObjectType.Null,
-                _ when type.Contains('[') => ListType.Empty,
-                _ => throw new InvalidOperationException()
-            };
+            return type is "void"
+                ? throw new InvalidOperationException("Type void has no default value.")
+                : type switch
+                {
+                    "int" => LongType.Zero,
+                    "double" => DoubleType.Zero,
+                    "decimal" => DecimalType.Zero,
+                    "bool" => BooleanType.False,
+                    "string" => StringType.Empty,
+                    "object" => ObjectType.Null,
+                    _ when type.Contains('[') => ListType.Empty,
+                    _ => throw new InvalidOperationException()
+                };
         }
     }
 }
