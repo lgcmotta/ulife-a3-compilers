@@ -45,7 +45,8 @@ jobs:
           /d:sonar.host.url="$SONAR_HOST_URL" \
           /d:sonar.qualitygate.wait=$QUALITY_GATE_WAIT \
           /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml" \
-          /d:sonar.scanner.scanAll=false
+          /d:sonar.scanner.scanAll=false \
+          /d:sonar.exclusions="tests/MSH.Interpreter.Tests/**"
 
       - name: .NET Restore
         shell: bash
