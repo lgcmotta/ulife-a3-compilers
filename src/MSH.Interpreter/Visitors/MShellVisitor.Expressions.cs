@@ -98,6 +98,11 @@ public sealed partial class MShellVisitor
 
         var unescaped = Regex.Unescape(inner);
 
+        if (unescaped is "{}")
+        {
+            throw new InvalidOperationException("When using string interpolation an expression is required between the brackets.");
+        }
+
         var formatted = InterpolationPattern.Replace(unescaped, match =>
         {
             var token = match.Groups[1].Value.Trim();
