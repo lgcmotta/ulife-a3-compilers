@@ -76,7 +76,7 @@ public sealed partial class MShellVisitor
             builder.Append(argument);
         }
 
-        _terminal.WriteLine(builder.ToString());
+        _terminal.WriteLine($"{builder.ToString()}");
 
         return LongType.Zero;
     }

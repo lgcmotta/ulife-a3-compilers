@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Msh.StandardLibrary.Types;
 
@@ -128,5 +129,10 @@ public sealed class ListType : Variant<ListType>, IVariant, IEnumerable<IVariant
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public override string ToString()
+    {
+        return $"[ {string.Join(", ", Items)} ]";
     }
 }
