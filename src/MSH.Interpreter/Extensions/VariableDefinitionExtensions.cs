@@ -29,7 +29,7 @@ internal static class VariableDefinitionExtensions
         {
             if (!string.Equals(expected ?? variable.Type, actual, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"Cannot assign type '{actual}' to '{variable.Type}'.");
+                throw new InvalidOperationException($"Cannot assign type '{actual}' to '{expected ?? variable.Type}'.");
             }
         }
     }
