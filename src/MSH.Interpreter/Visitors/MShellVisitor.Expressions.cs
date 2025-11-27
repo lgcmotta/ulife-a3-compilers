@@ -90,6 +90,15 @@ public sealed partial class MShellVisitor
         };
     }
 
+    public override IVariant VisitModulusExpression(MShellParser.ModulusExpressionContext context)
+    {
+        var left = Visit(context.left);
+
+        var right = Visit(context.right);
+
+        return left.Modulus(right);
+    }
+
     public override IVariant VisitStringExpression(MShellParser.StringExpressionContext context)
     {
         var raw = context.STRING_LITERAL().GetText();
