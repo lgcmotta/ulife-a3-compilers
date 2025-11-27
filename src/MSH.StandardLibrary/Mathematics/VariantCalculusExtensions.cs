@@ -117,18 +117,21 @@ public static class VariantCalculusExtensions
             return new DoubleType(total);
         }
 
+        return Sum(scalars);
+    }
+
+    private static LongType Sum(List<IVariant> scalars)
+    {
+        var total = scalars.Aggregate(0L, (current, variant) =>
         {
-            var total = scalars.Aggregate(0L, (current, variant) =>
+            if (variant is LongType longType)
             {
-                if (variant is LongType l)
-                {
-                    current += l.Value;
-                }
+                current += longType.Value;
+            }
 
-                return current;
-            });
+            return current;
+        });
 
-            return new LongType(total);
-        }
+        return new LongType(total);
     }
 }
