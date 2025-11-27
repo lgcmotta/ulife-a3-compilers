@@ -75,10 +75,12 @@ public sealed partial class MShellVisitor
 
     public override IVariant VisitDoWhileStatement(MShellParser.DoWhileStatementContext context)
     {
-        IVariant last = LongType.Zero;
+        IVariant last;
 
         do
         {
+            last = Visit(context.body);
+
             var condition = Visit(context.condition);
 
             if (condition is not BooleanType boolean)
@@ -91,7 +93,6 @@ public sealed partial class MShellVisitor
                 break;
             }
 
-            last = Visit(context.body);
         } while (true);
 
         return last;
