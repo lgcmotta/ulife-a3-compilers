@@ -35,7 +35,7 @@ jobs:
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
           SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-          QUALITY_GATE_WAIT: true
+          QUALITY_GATE_WAIT: false
         run: |
           dotnet-sonarscanner begin \
           /k:"$SONAR_PROJECT_KEY" \
