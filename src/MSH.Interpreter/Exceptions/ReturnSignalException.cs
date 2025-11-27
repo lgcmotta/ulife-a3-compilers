@@ -2,7 +2,7 @@
 
 namespace Msh.Interpreter.Exceptions;
 
-internal class ReturnSignalException(IVariant? variant) : Exception
+public class ReturnSignalException(IVariant? variant) : Exception
 {
     internal IVariant? Variant { get; } = variant;
 }
