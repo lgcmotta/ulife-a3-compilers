@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Msh.Interpreter\Msh.Interpreter.csproj" />
+    <ProjectReference Include="..\MSH.Interpreter\MSH.Interpreter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

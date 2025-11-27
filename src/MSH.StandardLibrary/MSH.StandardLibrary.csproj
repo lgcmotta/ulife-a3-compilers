@@ -5,6 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Msh.Interpreter" />
+    <InternalsVisibleTo Include="MSH.Interpreter" />
   </ItemGroup>
 </Project>

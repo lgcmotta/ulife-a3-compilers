@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Msh.StandardLibrary\Msh.StandardLibrary.csproj" />
+    <ProjectReference Include="..\MSH.StandardLibrary\MSH.StandardLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
