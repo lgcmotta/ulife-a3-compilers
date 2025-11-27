@@ -7,6 +7,7 @@ on:
 
 jobs:
   sonar:
+    name: SonarCloud Analysis
     uses: ./.github/workflows/sonar.yml
     secrets: inherit
 
