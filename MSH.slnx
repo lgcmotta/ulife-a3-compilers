@@ -13,6 +13,9 @@
     <File Path=".github/workflows/publish.yml" />
     <File Path=".github/workflows/sonar.yml" />
   </Folder>
+  <Folder Name="/Solution Items/assets/">
+    <File Path="assets/assingment.pdf" />
+  </Folder>
   <Folder Name="/Solution Items/docs/">
     <File Path="docs/README.md" />
   </Folder>
