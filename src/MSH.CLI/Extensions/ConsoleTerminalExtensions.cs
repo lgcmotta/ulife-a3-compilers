@@ -16,8 +16,9 @@ internal static class ConsoleTerminalExtensions
 
         internal void WriteInstructions()
         {
-            terminal.Console.MarkupLine("Type [yellow]clear[/] to clean the terminal.");
-            terminal.Console.MarkupLine("Type [red]exit[/] to exit the quit REPL mode.");
+            terminal.Console.MarkupLine("Enter MShell statements below. Use:");
+            terminal.Console.MarkupLine("[yellow]clear[/] – clear the terminal screen");
+            terminal.Console.MarkupLine("[red]exit[/] – leave REPL mode");;
         }
 
         internal async Task<string?> PromptLineAsync(CancellationToken cancellationToken = default)

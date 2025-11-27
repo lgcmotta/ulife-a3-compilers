@@ -18,7 +18,7 @@ public class ConsoleTerminal : ITerminal
 
     public void WriteLine(FormattableString value)
     {
-        Console.MarkupInterpolated(value);
+        Console.MarkupLineInterpolated(value);
     }
 
     public void WriteLine(string value)

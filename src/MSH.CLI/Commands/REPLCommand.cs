@@ -8,7 +8,9 @@ using Cocona;
 
 using Msh.CommandLineInterface.Extensions;
 using Msh.CommandLineInterface.Terminals;
+using Msh.Interpreter.Listeners;
 using Msh.Interpreter.Visitors;
+using Msh.StandardLibrary.Exceptions;
 
 using Spectre.Console;
 
@@ -26,12 +28,13 @@ internal static class REPLCommand
                 terminal.WriteInstructions();
 
                 var visitor = new MShellVisitor(terminal);
+                var listener = new MShellErrorListener(terminal);
 
                 var buffer = new StringBuilder();
 
-                try
+                while (!ctx.CancellationToken.IsCancellationRequested)
                 {
-                    while (!ctx.CancellationToken.IsCancellationRequested)
+                    try
                     {
                         var line = await terminal.PromptLineAsync(ctx.CancellationToken);
 
@@ -62,11 +65,15 @@ internal static class REPLCommand
 
                         var input = new AntlrInputStream(content.ReplaceLineEndings(string.Empty));
 
-                        var lexer = new MShellLexer(input) { ErrorListeners = { ConsoleErrorListener<int>.Instance } };
+                        var lexer = new MShellLexer(input);
+                        lexer.RemoveErrorListeners();
+                        lexer.AddErrorListener(listener);
 
                         var tokens = new CommonTokenStream(lexer);
 
-                        var parser = new MShellParser(tokens) { ErrorListeners = { ConsoleErrorListener<IToken>.Instance } };
+                        var parser = new MShellParser(tokens);
+                        parser.RemoveErrorListeners();
+                        parser.AddErrorListener(listener);
 
                         var tree = parser.item();
 
@@ -74,19 +81,22 @@ internal static class REPLCommand
 
                         terminal.WriteVariant(variant);
                     }
+                    catch (Exception exception) when (exception is InvalidOperationException or InvalidVariantCastException)
+                    {
+                        terminal.Console.WriteException(exception, ExceptionFormats.ShortenPaths | ExceptionFormats.ShortenTypes |
+                                                                   ExceptionFormats.ShortenMethods | ExceptionFormats.ShowLinks);
+                    }
+                    catch (Exception exception) when (exception is not OperationCanceledException)
+                    {
+                        // pass
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return 0L;
+                    }
+                }
 
-                    return 0L;
-                }
-                catch (Exception exception) when (exception is not OperationCanceledException)
-                {
-                    terminal.Console.WriteException(exception, ExceptionFormats.ShortenEverything);
-
-                    return 1L;
-                }
-                catch (OperationCanceledException)
-                {
-                    return 0L;
-                }
+                return 0L;
             });
 
             return app;
