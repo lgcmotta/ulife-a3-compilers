@@ -19,6 +19,9 @@
   <Folder Name="/Solution Items/docs/">
     <File Path="docs/README.md" />
   </Folder>
+  <Folder Name="/Solution Items/scripts/">
+    <File Path="scripts/configuration.winget" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/MSH.CLI/MSH.CLI.csproj" />
     <Project Path="src/MSH.Interpreter/MSH.Interpreter.csproj" />

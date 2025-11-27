@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+
+properties:
+  resources:
+    - resource: Microsoft.Windows.Settings/WindowsSettings
+      directives:
+        description: Enable Developer Mode
+        allowPrerelease: true
+        securityContext: elevated
+      settings:
+        DeveloperMode: true
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: PowerShell
+      directives:
+        description: Install PowerShell Core
+      settings:
+        id: Microsoft.PowerShell
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: Git
+      dependsOn:
+        - PowerShell
+      directives:
+        description: Install Git
+      settings:
+        id: Git.Git
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VSCode
+      dependsOn:
+        - Git
+      directives:
+        description: Install VS Code
+      settings:
+        id: Microsoft.VisualStudioCode
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: DotNetSdk
+      dependsOn:
+        - VSCode
+      directives:
+        description: Install .NET 10 SDK
+      settings:
+        id: Microsoft.DotNet.SDK.10
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: AspNetCore
+      dependsOn:
+        - DotNetSdk
+      directives:
+        description: Install .NET 10 AspNetCore Runtime
+      settings:
+        id: Microsoft.DotNet.AspNetCore.10
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: DesktopRuntime
+      dependsOn:
+        - AspNetCore
+      directives:
+        description: Install .NET 10 DesktopRuntime Runtime
+      settings:
+        id: Microsoft.DotNet.DesktopRuntime.10
+        source: winget
+  configurationVersion: 0.2.0
