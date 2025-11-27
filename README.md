@@ -14,9 +14,12 @@ The complete assignment instructions are available in PDF format and only in Por
 
 The application can be installed as a [dotnet global tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools).
 
+
 ### Install the .NET 10 SDK 🔧
 
-Download and install the .NET 10 SDK from the official website: [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- Option 1: Download the **automated winget script** available [here](
+https://raw.githubusercontent.com/lgcmotta/ulife-a3-compilers/refs/heads/main/scripts/configuration.winget) and just double click it.
+- Option 2: Download and install the .NET 10 SDK from the official website: [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 > ⚠️ Download the .NET installer based on your OS and architecture.
 
@@ -44,8 +47,8 @@ Locate your NuGet.config file:
 |----------------------|-----------------------------------|
 | Windows (PowerShell) | `$env:AppData\NuGet\NuGet.Config` |
 | Windows (CMD)        | `%APPDATA%\NuGet\NuGet.Config`    |
-| Linux                | ~/.nuget/NuGet/NuGet.Config       |
-| OSX                  | ~/.nuget/NuGet/NuGet.Config       |
+| Linux                | `~/.nuget/NuGet/NuGet.Config`     |
+| OSX                  | `~/.nuget/NuGet/NuGet.Config`     |
 
 > ⚠️ The `NuGet.config` file name may appear as `NuGet.config` or `NuGet.Config`, depending on the OS.
 > On Windows, you can access the directory using `$env:AppData` (PowerShell) or `%APPDATA%` (CMD).
@@ -104,6 +107,6 @@ msh [COMMAND] [options]
 
 The `run` commands support the following parameters:
 
-| Option             | Required  | Description                                 |
-|--------------------|-----------|---------------------------------------------|
-| `-f`  or `--file`  | **true**  | File path containing the `.ms` script file. |
+| Option            | Required | Description                                 |
+|-------------------|----------|---------------------------------------------|
+| `-f`  or `--file` | **true** | File path containing the `.ms` script file. |
