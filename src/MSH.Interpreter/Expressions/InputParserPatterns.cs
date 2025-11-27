@@ -1,9 +1,15 @@
 ﻿using System.Text.RegularExpressions;
 
+using JetBrains.Annotations;
+
 namespace Msh.Interpreter.Expressions;
 
+[UsedImplicitly]
 internal partial class InputParserPatterns
 {
+    protected InputParserPatterns()
+    { }
+
     internal static readonly Regex LongPattern = CreateLongPattern();
     internal static readonly Regex DoublePattern = CreateDoublePattern();
     internal static readonly Regex DecimalPattern = CreateDecimalPattern();
