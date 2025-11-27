@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Msh.StandardLibrary\Msh.StandardLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="MSH.Interpreter.Tests" />
+  </ItemGroup>
+
 </Project>
