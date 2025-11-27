@@ -89,7 +89,7 @@ internal static class InputParsingExtensions
             {
                 if (part.TryParseVariant(out var parsed) && parsed is not null)
                 {
-                    parsedItems.Add(parsed);
+                    parsedItems.Add((IVariant)parsed);
                     continue;
                 }
 

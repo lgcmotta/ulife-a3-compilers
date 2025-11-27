@@ -14,7 +14,7 @@ public static class VariantAlgebraExtensions
                 LongType l => new DoubleType(Math.Sqrt(l.Value)),
                 DoubleType d => new DoubleType(Math.Sqrt(d.Value)),
                 DecimalType m => new DoubleType(Math.Sqrt((double)m.Value)),
-                ListType lt when lt.IsScalarValuesCollection() => new ListType([..lt.Select(Sqrt)]),
+                ListType lt when lt.IsScalarValuesCollection() => new ListType([.. lt.Select(Sqrt)]),
                 _ => throw new OperationNotSupportedException(nameof(Sqrt))
             };
         }

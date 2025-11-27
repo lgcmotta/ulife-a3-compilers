@@ -157,7 +157,6 @@ public sealed partial class MShellVisitor
                 list.Items[idx] = mutated;
 
                 result = mutated;
-
             });
 
             return result ?? LongType.Zero;
@@ -197,7 +196,6 @@ public sealed partial class MShellVisitor
                 list.Items[idx] = mutated;
 
                 result = current;
-
             });
 
             return result ?? LongType.Zero;

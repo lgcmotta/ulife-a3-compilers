@@ -75,7 +75,7 @@ internal static class VariantExtensions
                 Kind.Decimal => new DecimalType(-variant.Cast<DecimalType>().Value),
                 Kind.Bool => !variant.Cast<BooleanType>(),
                 Kind.List => new ListType(variant.Cast<ListType>().Select(ReverseSign)),
-                Kind.String => new StringType(new string([..variant.Cast<StringType>().Value.Reverse()])),
+                Kind.String => new StringType(new string([.. variant.Cast<StringType>().Value.Reverse()])),
                 Kind.Object => throw new InvalidOperationException(),
                 _ => throw new InvalidOperationException()
             };

@@ -15,9 +15,9 @@
   <Folder Name="/Solution Items/docs/">
     <File Path="docs/README.md" />
   </Folder>
-	<Folder Name="/src/">
-	  <Project Path="src/MSH.CLI/MSH.CLI.csproj" />
-	  <Project Path="src/MSH.Interpreter/MSH.Interpreter.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/MSH.CLI/MSH.CLI.csproj" />
+    <Project Path="src/MSH.Interpreter/MSH.Interpreter.csproj" />
     <Project Path="src/MSH.StandardLibrary/MSH.StandardLibrary.csproj" />
   </Folder>
   <Folder Name="/tests/">

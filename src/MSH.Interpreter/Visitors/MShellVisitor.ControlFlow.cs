@@ -92,7 +92,6 @@ public sealed partial class MShellVisitor
             {
                 break;
             }
-
         } while (true);
 
         return last;

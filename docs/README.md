@@ -146,6 +146,7 @@ You can type `clear` at any time to clean your terminal.
 ```bash
 clear
 ```
+
 ---
 
 ## Program Structure
@@ -164,7 +165,7 @@ An MShell program is made of:
 
 ### Top-Level Statements
 
-In MShell, you do not need a `Main` function. Execution begins at the first statement written in the file. 
+In MShell, you do not need a `Main` function. Execution begins at the first statement written in the file.
 If MShell encounters a function declaration in the middle of your program, it will first store all function declarations, then it will run all statements.
 
 ```csharp
@@ -916,6 +917,7 @@ double v = grid[1][0];   // 3.0
 MShell evaluates expressions left-to-right, respecting precedence. This deterministic rule ensures predictable behavior.
 
 ---
+
 ## Lists
 
 Lists In Depth
@@ -1029,6 +1031,7 @@ Write(nums);     // [10, 20]
 ```
 
 Type rules:
+
 - The value must match the list’s element type.
 
 #### RemoveAt
@@ -1298,7 +1301,6 @@ for (int j = 0; j < 3; j++)
     Write(j);
 }
 ```
-
 
 Key rules:
 
@@ -1910,7 +1912,6 @@ Write(x);     // OK: x is global
 >
 > If a local variable has the same name as a global variable, the local variable takes precedence.
 
-
 ### Function Scope
 
 Variables declared inside a function exist only inside that function.
@@ -1993,7 +1994,8 @@ This behavior prevents accidental reuse of loop indices outside the loop.
 
 A `return` statement may only be used inside a function body.
 
-> ⚠️ The global scope accepts a `return` statement because it implements C#-like top-level statements by wrapping the code in the global scope within a virtual `Main` function.
+> ⚠️ The global scope accepts a `return` statement because it implements C#-like top-level statements by wrapping the code in the global scope within a virtual `Main`
+> function.
 
 ### No Hoisting
 
@@ -2019,7 +2021,7 @@ This rule ensures predictable execution.
 ### Summary of Scoping Behavior
 
 | Construct        | Scope Created? | Access Outside Block? |
-| ---------------- | -------------- | --------------------- |
+|------------------|----------------|-----------------------|
 | Script top level | Global scope   | Yes                   |
 | `{ ... }` block  | Yes            | No                    |
 | `if / else`      | Yes            | No                    |
@@ -2033,7 +2035,8 @@ This rule ensures predictable execution.
 ## Errors & Limitations
 
 MShell is intentionally small, strict, and predictable.
-To achieve this, the language enforces several rules at both parse time and runtime. When these rules are violated, MShell produces clear error messages and stops execution immediately.
+To achieve this, the language enforces several rules at both parse time and runtime. When these rules are violated, MShell produces clear error messages and stops
+execution immediately.
 
 Understanding these errors helps you write safer programs and debug issues quickly.
 
@@ -2159,7 +2162,6 @@ This means the valid range for `int`, `double`, and `decimal` values is:
 | `int`               | $-9{,}223{,}372{,}036{,}854{,}775{,}808$ | $9{,}223{,}372{,}036{,}854{,}775{,}807$ |
 | `double`            |  $-1.7976931348623157 \times 10^{308}$   |  $1.7976931348623157 \times 10^{308}$   |
 | `decimal`           |         $-7.9228 \times 10^{28}$         |         $7.9228 \times 10^{28}$         |
-
 
 If a calculation produces a value outside this range, an overflow error may occur depending on your MShell implementation.
 

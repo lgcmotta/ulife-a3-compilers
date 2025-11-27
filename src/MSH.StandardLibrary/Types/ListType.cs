@@ -6,7 +6,7 @@ public sealed class ListType : Variant<ListType>, IVariant, IEnumerable<IVariant
 {
     public ListType(IEnumerable<IVariant> items)
     {
-        Items = (List<IVariant>)[..items];
+        Items = (List<IVariant>)[.. items];
     }
 
     public Kind Kind => Kind.List;
@@ -28,10 +28,10 @@ public sealed class ListType : Variant<ListType>, IVariant, IEnumerable<IVariant
     public void Clear() => Items.Clear();
 
     public static ListType operator +(ListType left, ListType right) =>
-        new([..left.Items, ..right.Items]);
+        new([.. left.Items, .. right.Items]);
 
     public static ListType operator -(ListType left, ListType right) =>
-        new([..left.Items.Except(right.Items)]);
+        new([.. left.Items.Except(right.Items)]);
 
     public static bool operator ==(ListType? left, ListType? right)
         => left?.Equals(right) ?? right is null;
