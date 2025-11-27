@@ -83,16 +83,18 @@ internal static class VariantExtensions
 
         internal IVariant MutateUnary(string op)
         {
+            const string? exceptionMessage = "Unary operators require numeric types.";
+
             var one = variant.Kind switch
             {
                 Kind.Decimal => DecimalType.One,
                 Kind.Double => DoubleType.One,
                 Kind.Long => LongType.One,
-                Kind.Bool => throw new InvalidOperationException("Unary operators require numeric types."),
-                Kind.String => throw new InvalidOperationException("Unary operators require numeric types."),
-                Kind.List => throw new InvalidOperationException("Unary operators require numeric types."),
-                Kind.Object => throw new InvalidOperationException("Unary operators require numeric types."),
-                _ => throw new InvalidOperationException("Unary operators require numeric types.")
+                Kind.Bool => throw new InvalidOperationException(exceptionMessage),
+                Kind.String => throw new InvalidOperationException(exceptionMessage),
+                Kind.List => throw new InvalidOperationException(exceptionMessage),
+                Kind.Object => throw new InvalidOperationException(exceptionMessage),
+                _ => throw new InvalidOperationException(exceptionMessage)
             };
 
             return op switch
